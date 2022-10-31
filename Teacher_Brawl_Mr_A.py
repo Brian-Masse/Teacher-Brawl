@@ -2,7 +2,9 @@ import pygame
 import math
 import os
 
-Directory = "/Users/brianmasse/Desktop/python/Games/Teacher Brawl - the game"
+Directory = "/Users/brianmasse/Developer/Python/Teacher-Brawl"
+
+
 class skin_base(pygame.sprite.Sprite):
     def __init__(self, game, controlled, move):
         self.game = game
@@ -16,12 +18,14 @@ class skin_base(pygame.sprite.Sprite):
         self.move = move
 
     def get_size(self,  width, height, center, scale):
-        self.image = pygame.Surface((width, height ))
+        self.image = pygame.Surface((width, height))
         self.rect = self.image.get_rect()
         if self.controlled.dir_his[-1] == -90:
-            self.rect.x = (self.controlled.rect.x + self.controlled.rect.width / 2) - center * scale
+            self.rect.x = (self.controlled.rect.x +
+                           self.controlled.rect.width / 2) - center * scale
         if self.controlled.dir_his[-1] == 90:
-            self.rect.x = (self.controlled.rect.x + self.controlled.rect.width / 2) - (width / scale - center) * scale
+            self.rect.x = (self.controlled.rect.x + self.controlled.rect.width /
+                           2) - (width / scale - center) * scale
 
         self.rect.bottom = self.controlled.rect.bottom
 
@@ -33,13 +37,16 @@ class skin_base(pygame.sprite.Sprite):
         if self.controlled.boolians[5] > 0:
             self.rect.x += 40 * self.controlled.dir_his[-1] / 90
 
+
 class Mr_A(pygame.sprite.Sprite):
     def __init__(self, game, controlled):
         self.game = game
         self.groups = game.sprite_group, game.scaled
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.folder = Directory + "/Game images/Mr A"
-        self.image = pygame.image.load(os.path.join(self.folder, "b.png")).convert_alpha()
+
+        self.image = pygame.image.load(os.path.join(
+            self.folder, "b.png")).convert_alpha()
         self.rect = self.image.get_rect()
 
         self.mirror = controlled
@@ -55,7 +62,6 @@ class Mr_A(pygame.sprite.Sprite):
         self.spin_cycle = 0
         self.knockback_cycle = 0
 
-
         self.health = 700
         self.stamina = 150
         self.walk_speed = 7
@@ -68,7 +74,8 @@ class Mr_A(pygame.sprite.Sprite):
 
         self.colorimg = pygame.Surface(self.image.get_size()).convert_alpha()
         self.colorimg.fill((255, 0, 0))
-        self.image.blit(self.colorimg, (0,0), special_flags = pygame.BLEND_RGBA_MULT)
+        self.image.blit(self.colorimg, (0, 0),
+                        special_flags=pygame.BLEND_RGBA_MULT)
 
     def check_image(self):
         if abs(self.controlled.j_triggers[-6]) == 1 or self.controlled.boolians[8] or self.controlled.boolians[5] > 0 or self.controlled.boolians[6] or self.controlled.boolians[7] or self.controlled.boolians[9] or self.controlled.boolians[15] or self.controlled.boolians[13] or self.controlled.ydir != 0 or self.controlled.velocity > 10 or self.controlled.boolians[4] or self.controlled.boolians[3] or self.controlled.boolians[14] == True or self.controlled.boolians[11] or self.controlled.boolians[16] or self.controlled.boolians[17] or self.controlled.counts[13] >= 101:
@@ -224,14 +231,18 @@ class Mr_A(pygame.sprite.Sprite):
 
     def update_image(self):
 
-        self.image = pygame.image.load(os.path.join(self.folder, self.img)).convert_alpha()
-        self.image = pygame.transform.flip(self.image, int(max(0, self.controlled.dir_his[-1] / 90)), 0)
+        self.image = pygame.image.load(os.path.join(
+            self.folder, self.img)).convert_alpha()
+        self.image = pygame.transform.flip(self.image, int(
+            max(0, self.controlled.dir_his[-1] / 90)), 0)
         if self.img == 'r.png':
             self.roll_cycle += 15
-            self.image = pygame.transform.rotate(self.image, self.roll_cycle * self.controlled.dir_his[-1] / 90)
+            self.image = pygame.transform.rotate(
+                self.image, self.roll_cycle * self.controlled.dir_his[-1] / 90)
         if self.img == 'k.png':
             self.knockback_cycle += .2
-            self.image = pygame.transform.rotate(self.image, self.knockback_cycle * self.controlled.dir_his[-1] / 90)
+            self.image = pygame.transform.rotate(
+                self.image, self.knockback_cycle * self.controlled.dir_his[-1] / 90)
         else:
             self.rol_cycle = 0
         self.rect = self.image.get_rect()
@@ -246,4 +257,5 @@ class Mr_A(pygame.sprite.Sprite):
         self.update_image()
         self.check_dash()
 
-        self.mirror.get_size(self.rect.width * 3, self.rect.height * 3, self.center, 3)
+        self.mirror.get_size(self.rect.width * 3,
+                             self.rect.height * 3, self.center, 3)

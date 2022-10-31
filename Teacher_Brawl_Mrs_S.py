@@ -3,14 +3,17 @@ import pygame
 import math
 import os
 
-Directory = "/Users/brianmasse/Desktop/python/Games/Teacher Brawl - the game"
+Directory = "/Users/brianmasse/Developer/Python/Teacher-Brawl"
+
+
 class Mrs_S(pygame.sprite.Sprite):
     def __init__(self, game, controlled):
         self.game = game
         self.groups = game.sprite_group, game.scaled
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.folder = Directory + "/Game images/Mrs S"
-        self.image = pygame.image.load(os.path.join(self.folder, "b.png")).convert_alpha()
+        self.image = pygame.image.load(os.path.join(
+            self.folder, "b.png")).convert_alpha()
         self.rect = self.image.get_rect()
 
         self.mirror = controlled
@@ -110,7 +113,6 @@ class Mrs_S(pygame.sprite.Sprite):
                     self.img = "ga.png"
                     self.center = 22
 
-
             if self.controlled.boolians[8]:
                 self.img = 'sl.png'
                 self.center = 39
@@ -191,21 +193,25 @@ class Mrs_S(pygame.sprite.Sprite):
 
     def update_image(self):
 
-        self.image = pygame.image.load(os.path.join(self.folder, self.img)).convert_alpha()
-        self.image = pygame.transform.flip(self.image, int(max(0, self.controlled.dir_his[-1] / 90)), 0)
+        self.image = pygame.image.load(os.path.join(
+            self.folder, self.img)).convert_alpha()
+        self.image = pygame.transform.flip(self.image, int(
+            max(0, self.controlled.dir_his[-1] / 90)), 0)
         if self.img == 'r.png':
             self.roll_cycle += 15
-            self.image = pygame.transform.rotate(self.image, self.roll_cycle * self.controlled.dir_his[-1] / 90)
+            self.image = pygame.transform.rotate(
+                self.image, self.roll_cycle * self.controlled.dir_his[-1] / 90)
         if self.img == 'k.png':
             self.knockback_cycle += .2
-            self.image = pygame.transform.rotate(self.image, self.knockback_cycle * self.controlled.dir_his[-1] / 90)
+            self.image = pygame.transform.rotate(
+                self.image, self.knockback_cycle * self.controlled.dir_his[-1] / 90)
         else:
             self.rol_cycle = 0
         self.rect = self.image.get_rect()
-
 
     def update(self):
         self.check_image()
         self.update_image()
 
-        self.mirror.get_size(self.rect.width * 3, self.rect.height * 3, self.center, 3)
+        self.mirror.get_size(self.rect.width * 3,
+                             self.rect.height * 3, self.center, 3)

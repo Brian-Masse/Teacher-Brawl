@@ -8,15 +8,18 @@ pygame.init()
 
 screen_width = 1440
 screen_height = 860
-screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
+screen = pygame.display.set_mode(
+    (screen_width, screen_height), pygame.RESIZABLE)
 
+pygame.display.set_caption("Teacher Brawl")
 running = True
 CENTER_x = screen_width / 2
 CENTER_y = screen_height
 
 clock = pygame.time.Clock()
 
-Directory = "/Users/brianmasse/Desktop/python/Games/Teacher Brawl - the game"
+Directory = "/Users/brianmasse/Developer/Python/Teacher-Brawl"
+
 
 class Camera:
     def __init__(self, game):
@@ -32,12 +35,12 @@ class Camera:
         elif entity == A.B:
             return entity.rect.move(round(self.camera.x * .1), round(self.camera.y * .1))
 
-
     def scale(self, entity, target):
 
         if not abs(A.HB1.rect.x - A.HB2.rect.x) == 0:
             #self.total_scale = (1000 / abs(A.HB1.rect.x - A.HB2.rect.x))
-            self.total_scale = round((700 / math.sqrt((A.HB1.rect.right - A.HB2.rect.right)**2 + (A.HB1.rect.y - A.HB2.rect.y)**2)), 5)
+            self.total_scale = round(
+                (700 / math.sqrt((A.HB1.rect.right - A.HB2.rect.right)**2 + (A.HB1.rect.y - A.HB2.rect.y)**2)), 5)
 
         self.total_scale = max(0.66, self.total_scale)
         self.total_scale = min(1.6, self.total_scale)
@@ -52,25 +55,27 @@ class Camera:
 
         scaled_x = round(target.rect.width * self.total_scale)
         scaled_y = round(target.rect.height * self.total_scale)
-        entity.image = pygame.transform.scale(entity.image, (scaled_x, scaled_y))
+        entity.image = pygame.transform.scale(
+            entity.image, (scaled_x, scaled_y))
         entity.rect = entity.image.get_rect()
 
-        change_x = self.total_scale * ((target.rect.x + target.rect.width / 2) - CENTER_x)
-        change_y = self.total_scale * ((target.rect.y + target.rect.height / 2) - CENTER_y)
+        change_x = self.total_scale * \
+            ((target.rect.x + target.rect.width / 2) - CENTER_x)
+        change_y = self.total_scale * \
+            ((target.rect.y + target.rect.height / 2) - CENTER_y)
 
-        entity.rect.center = (round(CENTER_x + change_x), round(CENTER_y + change_y))
+        entity.rect.center = (round(CENTER_x + change_x),
+                              round(CENTER_y + change_y))
 
     def get_coords(self):
-        self.x = -(((A.P.rect.x + A.P.rect.width / 2) + (A.P2.rect.x + A.P2.rect.width / 2)) / 2) + screen_width / 2
-        y = abs((A.P.rect.y - A.P2.rect.y )) / 2
+        self.x = -(((A.P.rect.x + A.P.rect.width / 2) +
+                   (A.P2.rect.x + A.P2.rect.width / 2)) / 2) + screen_width / 2
+        y = abs((A.P.rect.y - A.P2.rect.y)) / 2
         y = min(300, y)
         y = max(A.P.rect.y - y, A.P2.rect.y - y)
 
         self.y = -y + screen_height / 2
         self.y = max(0, self.y)
-
-
-
 
     def update(self, target):
 
@@ -78,7 +83,6 @@ class Camera:
             self.get_coords()
             self.first = 0
             self.second = 0
-
 
         if self.shake_ < self.second and self.shake_ >= self.first:
             self.x += 5
@@ -93,13 +97,14 @@ class Camera:
         if self.shake_ >= self.second:
             self.shake_ = 0
 
-        self.camera = pygame.Rect(round(self.x), round(self.y), 1440 , 860)
+        self.camera = pygame.Rect(round(self.x), round(self.y), 1440, 860)
 
     def shake(self, first, second):
         self.first = first
         self.second = second
         self.get_coords()
         self.shake_ = True
+
 
 class player1(pygame.sprite.Sprite):
     def __init__(self, game, mirror, color):
@@ -109,7 +114,7 @@ class player1(pygame.sprite.Sprite):
 
         self.image = pygame.Surface((100, 50))
         self.image.set_alpha(0)
-        #self.image.fill(color)
+        # self.image.fill(color)
 
         self.mirror = mirror
         self.rect = self.image.get_rect()
@@ -117,8 +122,7 @@ class player1(pygame.sprite.Sprite):
         self.rect.x = (self.mirror.rect.x)
         self.rect.y = (self.mirror.rect.y)
 
-#================================================================================================================================================================================================
-
+# ================================================================================================================================================================================================
 
 
 class hit_box1(pygame.sprite.Sprite):
@@ -137,12 +141,13 @@ class hit_box1(pygame.sprite.Sprite):
         self.stats = [500, 100]
         #[self.health(0), self.stamina(1)]
         self.controlls = [left, right, jump, attack, block]
-        self.boolians = [False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
-        #[on_ground?(0), air_jump?(1), base_hit?(2), block?(3), stun?(4), hit?(5), crouch?(6), roll?(7), slide(8)?, slam(9)?, base_hit?(10), knockback?(11), touching_ground(12), upwards_spin(13), charge_up(14), jump?(15), strike(16)?, grab(17), grabbed(18), perried?(19)]
+        self.boolians = [False, True, False, False, False, False, False, False, False,
+                         False, False, False, False, False, False, False, False, False, False, False]
+        # [on_ground?(0), air_jump?(1), base_hit?(2), block?(3), stun?(4), hit?(5), crouch?(6), roll?(7), slide(8)?, slam(9)?, base_hit?(10), knockback?(11), touching_ground(12), upwards_spin(13), charge_up(14), jump?(15), strike(16)?, grab(17), grabbed(18), perried?(19)]
 
         self.j_triggers = []
         self.button = ['m']
-        self.joystick = pygame.joystick.Joystick(ID) 
+        self.joystick = pygame.joystick.Joystick(ID)
         self.joystick.init()
 
         self.velocity = 0
@@ -226,7 +231,7 @@ class hit_box1(pygame.sprite.Sprite):
             self.force = self.init_force - (9.8 * self.counts[0])
             if self.force < 0:
                 self.force = 0
-                self.init_force= 0
+                self.init_force = 0
                 self.counts[0] = 0
 
     def jump(self):
@@ -234,7 +239,7 @@ class hit_box1(pygame.sprite.Sprite):
 
         for i in self.button:
             if not self.boolians[4]:
-                if self.keys[self.controlls[2]] or i == 0 :
+                if self.keys[self.controlls[2]] or i == 0:
 
                     if self.boolians[0]:
                         if not self.boolians[15]:
@@ -246,7 +251,6 @@ class hit_box1(pygame.sprite.Sprite):
                             self.init_force = 200
                             self.boolians[0] = 0
                             self.boolians[12] = False
-
 
                     if not self.boolians[0] and self.force == 0 and self.boolians[1]:
                         self.boolians[15] = True
@@ -267,7 +271,7 @@ class hit_box1(pygame.sprite.Sprite):
                 self.x_velocity = - self.player.walk_speed * self.mod
                 self.dir = -90
             elif self.keys[self.controlls[1]] or self.j_triggers[-6] == 1:
-                self.x_velocity =  self.player.walk_speed * self.mod
+                self.x_velocity = self.player.walk_speed * self.mod
                 self.dir = 90
 
             else:
@@ -280,7 +284,7 @@ class hit_box1(pygame.sprite.Sprite):
         og_x, og_y = self.rect.x, self.rect.bottom
         self.image = pygame.Surface((width, height))
         self.rect = self.image.get_rect()
-        self.rect.x, self.rect.bottom = og_x , og_y
+        self.rect.x, self.rect.bottom = og_x, og_y
 
     def check_crouch(self):
         self.temp_check2 = False
@@ -330,7 +334,8 @@ class hit_box1(pygame.sprite.Sprite):
                 self.boolians[7] = False
 
     def check_slide(self):
-        hits = pygame.sprite.spritecollide(self, self.target.sprite_player, False)
+        hits = pygame.sprite.spritecollide(
+            self, self.target.sprite_player, False)
         if self.button.count(14) >= 1 and abs(self.j_triggers[-6]) == 1 and self.j_triggers[-3] == 1:
             if not self.temp_check4 > 2 and self.boolians[12] and not self.stats[1] < 25 and self.temp_check == False and not self.boolians[4] and not self.target.boolians[18]:
                 self.temp_check4 = 2
@@ -361,10 +366,12 @@ class hit_box1(pygame.sprite.Sprite):
     def check_collide(self, dir):
         for i in range(2):
             if i == 0:
-                hits = pygame.sprite.spritecollide(self, self.game.sprite_ground, False)
+                hits = pygame.sprite.spritecollide(
+                    self, self.game.sprite_ground, False)
 
             if i == 1 and not self.boolians[8]:
-                hits = pygame.sprite.spritecollide(self, self.target.sprite_player, False)
+                hits = pygame.sprite.spritecollide(
+                    self, self.target.sprite_player, False)
             else:
                 i = 3
 
@@ -462,7 +469,8 @@ class hit_box1(pygame.sprite.Sprite):
                 self.target.stats[1] -= damage
 
     def charge_up(self):
-        hits = pygame.sprite.spritecollide(self.target, self.arm.sprite_arm, False,)
+        hits = pygame.sprite.spritecollide(
+            self.target, self.arm.sprite_arm, False,)
         if self.j_triggers[-2] == 1 and not self.boolians[14] and self.boolians[12] and not self.boolians[14] == -10 and not self.boolians[15] and not self.target.boolians[18]:
             self.counts[10] += 1
             if self.counts[10] >= 15:
@@ -473,9 +481,12 @@ class hit_box1(pygame.sprite.Sprite):
 
         if not self.j_triggers[-2] == 1 and self.counts[10] >= 15 or self.counts[10] >= 140 or self.boolians[14] == True or self.stats[1] < 0 and self.counts[10] >= 15:
             self.boolians[14] = True
-            og_x = round((self.rect.x + (self.rect.width / 2)) + (self.rect.width / 3) * (self.dir / 90))
-            og_y = round(self.rect.y + (self.rect.height / 3)) + (self.rect.height / 2) * self.ydir / -180
-            self.arm.rect.center = (round(og_x + 50 * self.dir / 90), round(og_y))
+            og_x = round((self.rect.x + (self.rect.width / 2)) +
+                         (self.rect.width / 3) * (self.dir / 90))
+            og_y = round(self.rect.y + (self.rect.height / 3)) + \
+                (self.rect.height / 2) * self.ydir / -180
+            self.arm.rect.center = (
+                round(og_x + 50 * self.dir / 90), round(og_y))
             self.counts[10] -= 1
             self.counts[1] = 0
             self.stun(1)
@@ -494,9 +505,12 @@ class hit_box1(pygame.sprite.Sprite):
                 self.counts[0] = 40
                 self.counts[7] = 85
                 self.arm.image = pygame.Surface((100, 35))
-                og_x = round((self.rect.x + (self.rect.width / 2)) + (self.rect.width / 3) * (self.dir / 90))
-                og_y = round(self.rect.y + (self.rect.height / 3)) + (self.rect.height / 2) * self.ydir / -180
-                self.arm.rect.center = (og_x, round(og_y + 50 * A.C.total_scale))
+                og_x = round((self.rect.x + (self.rect.width / 2)) +
+                             (self.rect.width / 3) * (self.dir / 90))
+                og_y = round(self.rect.y + (self.rect.height / 3)) + \
+                    (self.rect.height / 2) * self.ydir / -180
+                self.arm.rect.center = (
+                    og_x, round(og_y + 50 * A.C.total_scale))
         else:
             self.boolians[9] = False
             self.counts[7] = 0
@@ -512,7 +526,7 @@ class hit_box1(pygame.sprite.Sprite):
                     if not self.boolians[13]:
                         self.player.spin_cycle = 0
                         self.counts[0] = 0
-                        self.boolians[0]= False
+                        self.boolians[0] = False
                         self.init_force = 400
                         self.force = 400
                         self.boolians[13] = True
@@ -527,7 +541,6 @@ class hit_box1(pygame.sprite.Sprite):
             og_y = round(self.rect.y - (self.arm.rect.height / 3))
             self.arm.rect.center = (round(og_x), round(og_y))
             self.stats[1] -= 2
-
 
         if self.force <= 0 or self.stats[1] < 0:
 
@@ -545,7 +558,8 @@ class hit_box1(pygame.sprite.Sprite):
             self.counts[11] += 1
             self.counts[1] = 0
             self.stun(1)
-            og_x = round((self.rect.x + (self.rect.width / 2)) + (self.rect.width / 3) * (self.dir_his[-1] / 90))
+            og_x = round((self.rect.x + (self.rect.width / 2)) +
+                         (self.rect.width / 3) * (self.dir_his[-1] / 90))
             og_y = round(self.rect.y + (self.rect.height / 3))
             self.arm.rect.center = (round(og_x), round(og_y))
 
@@ -556,9 +570,11 @@ class hit_box1(pygame.sprite.Sprite):
             self.boolians[16] = True
             self.arm.image = pygame.Surface((100, 35))
             self.arm.rect = self.arm.image.get_rect()
-            og_x = round((self.rect.x + (self.rect.width / 2)) + (self.rect.width / 3) * (self.dir_his[-1] / 90))
+            og_x = round((self.rect.x + (self.rect.width / 2)) +
+                         (self.rect.width / 3) * (self.dir_his[-1] / 90))
             og_y = round(self.rect.y + (self.rect.height / 3))
-            self.arm.rect.center = (round(og_x + 50 * self.dir / 90), round(og_y))
+            self.arm.rect.center = (
+                round(og_x + 50 * self.dir / 90), round(og_y))
 
         if self.counts[11] >= 30:
             self.counts[11] = 0
@@ -589,9 +605,12 @@ class hit_box1(pygame.sprite.Sprite):
 
         if self.boolians[5] > 0:
             self.counts[8] += 1
-            og_x = round((self.rect.x + (self.rect.width / 2)) + (self.rect.width / 3) * (self.dir / 90))
-            og_y = round(self.rect.y + (self.rect.height / 3)) + (self.rect.height / 2) * self.ydir / -180
-            self.arm.rect.center = (round(og_x + 50 * self.dir / 90), round(og_y))
+            og_x = round((self.rect.x + (self.rect.width / 2)) +
+                         (self.rect.width / 3) * (self.dir / 90))
+            og_y = round(self.rect.y + (self.rect.height / 3)) + \
+                (self.rect.height / 2) * self.ydir / -180
+            self.arm.rect.center = (
+                round(og_x + 50 * self.dir / 90), round(og_y))
             if self.counts[8] >= 10:
                 self.boolians[5] = -self.boolians[5]
                 self.counts[8] = 0
@@ -601,25 +620,27 @@ class hit_box1(pygame.sprite.Sprite):
                     self.boolians[5] = -4
 
     def base_hit_check(self, check, damage, knockback, knockback2, dir):
-        hits = pygame.sprite.spritecollide(self, self.target_arm.sprite_arm, False,)
+        hits = pygame.sprite.spritecollide(
+            self, self.target_arm.sprite_arm, False,)
         if hits and check > 0 or check > 0 and self.boolians[10]:
             if check < 3:
                 if not self.boolians[10]:
-                    self.target.block(damage / 2 , True, True)
+                    self.target.block(damage / 2, True, True)
                     if not self.boolians[3]:
                         self.stats[0] -= damage * self.damage_reduc
-                        self.leters = letters(A, (240, 62, 62), self.mirrorer, len(A.letters), "-" + str(damage))
+                        self.leters = letters(A, (240, 62, 62), self.mirrorer, len(
+                            A.letters), "-" + str(damage))
                         self.knockback(dir, knockback * 15, knockback)
                     A.C.shake(1, 2)
                     self.boolians[10] = True
 
-
             if check == 3:
                 if not self.boolians[10]:
-                    self.target.block(damage * 2 , True, True)
+                    self.target.block(damage * 2, True, True)
                     if not self.boolians[3]:
                         self.boolians[11] = False
-                        self.leters = letters(A, (240, 62, 62), self.mirrorer, len(A.letters), "-" + str(damage))
+                        self.leters = letters(A, (240, 62, 62), self.mirrorer, len(
+                            A.letters), "-" + str(damage))
                         self.knockback(dir, knockback2 * 15, knockback2)
                         self.stats[0] -= damage * self.damage_reduc
                     A.C.shake(6, 12)
@@ -629,11 +650,16 @@ class hit_box1(pygame.sprite.Sprite):
             self.boolians[10] = False
 
     def check_hits(self):
-        self.check_hit(self.target_arm.sprite_arm, self.target.boolians[9], self.target.player.slam_damage, self.target.dir_his[-1] / 90, 10, 10, 2)
-        self.check_hit(self.target_arm.sprite_arm, self.target.boolians[13], self.target.player.spin_damage, 0 , 10, 40, .1)
-        self.check_hit(self.target_arm.sprite_arm, self.target.boolians[14], self.target.counts[10] / 3, self.target.dir_his[-1] / 90 , self.target.counts[10], 1.7, .2)
-        self.check_hit(self.target_arm.sprite_arm, self.target.boolians[16], self.target.player.strike_damage, self.target.dir_his[-1] / 90 , 10, 9, 2)
-        self.base_hit_check(self.target.boolians[5], self.target.player.base_hit_damage, 1, 15, self.target.dir_his[-1] / 90)
+        self.check_hit(self.target_arm.sprite_arm,
+                       self.target.boolians[9], self.target.player.slam_damage, self.target.dir_his[-1] / 90, 10, 10, 2)
+        self.check_hit(self.target_arm.sprite_arm,
+                       self.target.boolians[13], self.target.player.spin_damage, 0, 10, 40, .1)
+        self.check_hit(self.target_arm.sprite_arm,
+                       self.target.boolians[14], self.target.counts[10] / 3, self.target.dir_his[-1] / 90, self.target.counts[10], 1.7, .2)
+        self.check_hit(self.target_arm.sprite_arm,
+                       self.target.boolians[16], self.target.player.strike_damage, self.target.dir_his[-1] / 90, 10, 9, 2)
+        self.base_hit_check(
+            self.target.boolians[5], self.target.player.base_hit_damage, 1, 15, self.target.dir_his[-1] / 90)
 
     def check_hit(self, entity, check, damage, dir, knockback, knockback_y, knockback_x):
         hits = pygame.sprite.spritecollide(self, entity, False,)
@@ -644,9 +670,11 @@ class hit_box1(pygame.sprite.Sprite):
                     pass
                 else:
                     self.stats[0] -= damage * self.damage_reduc
-                    self.leters = letters(A, (240, 62, 62), self.mirrorer, len(A.letters), "-" + str(round(damage, 1)))
+                    self.leters = letters(A, (240, 62, 62), self.mirrorer, len(
+                        A.letters), "-" + str(round(damage, 1)))
                     self.boolians[11] = False
-                    self.knockback(dir, knockback * knockback_y, knockback * knockback_x)
+                    self.knockback(dir, knockback * knockback_y,
+                                   knockback * knockback_x)
 
     def check_stamina(self,):
         if not self.stats[1] >= self.player.stamina:
@@ -678,9 +706,11 @@ class hit_box1(pygame.sprite.Sprite):
 
         if self.counts[12] >= 15 and not self.target.boolians[18]:
             self.boolians[17] = True
-            og_x = round((self.rect.x + (self.rect.width / 2)) + (self.rect.width / 3) * (self.dir / 90))
+            og_x = round((self.rect.x + (self.rect.width / 2)) +
+                         (self.rect.width / 3) * (self.dir / 90))
             og_y = round(self.rect.y + (self.rect.height / 3))
-            self.arm.rect.center = (round(og_x + 50 * self.dir / 90), round(og_y))
+            self.arm.rect.center = (
+                round(og_x + 50 * self.dir / 90), round(og_y))
             self.counts[1] = 0
             self.stun(1)
 
@@ -705,17 +735,21 @@ class hit_box1(pygame.sprite.Sprite):
             self.boolians[17] = False
 
     def check_grab(self):
-        hits = pygame.sprite.spritecollide(self, self.target_arm.sprite_arm, False,)
-        if self.target.boolians[17]     == True and hits and not self.boolians[18]:
+        hits = pygame.sprite.spritecollide(
+            self, self.target_arm.sprite_arm, False,)
+        if self.target.boolians[17] == True and hits and not self.boolians[18]:
             self.target.block(25, True, True)
             if not self.target.boolians[19]:
                 self.boolians[18] = True
         if self.boolians[18] and hits:
             self.counts[1] = 0
             self.stun(1)
-            self.rect.x = (self.target.rect.x + (self.target.rect.width * round(max(self.target.dir_his[-1] / 90, 0)))) +  round((self.rect.width * min(0, self.target.dir_his[-1] / 90)))
-            self.dir = ((self.target.rect.x - self.rect.x) / abs(self.target.rect.x - self.rect.x)) * 90
-            self.dir_his.append(((self.target.rect.x - self.rect.x) / abs(self.target.rect.x - self.rect.x)) * 90)
+            self.rect.x = (self.target.rect.x + (self.target.rect.width * round(max(
+                self.target.dir_his[-1] / 90, 0)))) + round((self.rect.width * min(0, self.target.dir_his[-1] / 90)))
+            self.dir = ((self.target.rect.x - self.rect.x) /
+                        abs(self.target.rect.x - self.rect.x)) * 90
+            self.dir_his.append(
+                ((self.target.rect.x - self.rect.x) / abs(self.target.rect.x - self.rect.x)) * 90)
 
     def check_grab_hit(self):
         if self.target.boolians[18]:
@@ -736,7 +770,8 @@ class hit_box1(pygame.sprite.Sprite):
     def check_grab_hit_(self, orginal_dir):
         if self.target.counts[13] < 10 and self.target.counts[13] != 0:
             self.stats[0] -= .5
-            self.leters = letters(A, (240, 62, 62), self.mirrorer, len(A.letters), "-" + str(1))
+            self.leters = letters(
+                A, (240, 62, 62), self.mirrorer, len(A.letters), "-" + str(1))
         if self.target.counts[13] == 101:
             if self.boolians[18]:
                 self.og_dir = orginal_dir
@@ -748,11 +783,10 @@ class hit_box1(pygame.sprite.Sprite):
             else:
                 self.knockback(0, 400, 0)
 
-
     def perry(self, power, knockback):
         self.boolians[19] = True
         if knockback:
-            self.knockback(self.dir / -90, power * 1.5, power / 2 )
+            self.knockback(self.dir / -90, power * 1.5, power / 2)
         if self.stats[1] <= 0:
             self.stun(100)
         else:
@@ -787,7 +821,8 @@ class hit_box1(pygame.sprite.Sprite):
                 for i in range(random.randrange(1, max(15, min(20, 5 * round((self.counts[14] - self.stats[0]) / 4))))):
                     temp = str(random.randrange(1, 4))
                     file = 'HP' + temp + '.png'
-                    A.hearts = particles(A, self.player, 10, 10, file, 35, True)
+                    A.hearts = particles(
+                        A, self.player, 10, 10, file, 35, True)
 
         self.counts[14] = self.stats[0]
 
@@ -829,7 +864,6 @@ class hit_box1(pygame.sprite.Sprite):
             self.draw_hearts()
             self.check_fall()
 
-
             self.velocity = - self.init_force + (9.8 * self.counts[0])
             self.rect.x += round(self.x_velocity)
             self.check_collide('x')
@@ -837,7 +871,7 @@ class hit_box1(pygame.sprite.Sprite):
             self.check_collide('y',)
             self.image.set_alpha(0)
 
-#================================================================================================================================================================================================
+# ================================================================================================================================================================================================
 
 
 class arm(pygame.sprite.Sprite):
@@ -865,13 +899,17 @@ class arm(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
 
             if self.target.ydir != 0:
-                x = round((self.target.rect.x + (self.target.rect.width / 2)) + (self.target.rect.width / 3) * (self.target.dir / 90))
+                x = round((self.target.rect.x + (self.target.rect.width / 2)) +
+                          (self.target.rect.width / 3) * (self.target.dir / 90))
             else:
-                x = round((self.target.rect.x + (self.target.rect.width / 2)) + (self.target.rect.width / 3) * (self.target.dir_his[-1] / 90))
-            y = round(self.target.rect.y + (self.target.rect.height / 3)) + (self.rect.height / 2) * self.target.ydir / -180
+                x = round((self.target.rect.x + (self.target.rect.width / 2)) +
+                          (self.target.rect.width / 3) * (self.target.dir_his[-1] / 90))
+            y = round(self.target.rect.y + (self.target.rect.height / 3)
+                      ) + (self.rect.height / 2) * self.target.ydir / -180
 
             self.rect.center = (round(x), round(y))
         self.image.set_alpha(0)
+
 
 class ground_skin(pygame.sprite.Sprite):
     def __init__(self, game, mirror):
@@ -880,13 +918,14 @@ class ground_skin(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, self.groups)
 
         self.image = pygame.Surface((50, 50))
-        self.image.fill((0,0, 0))
+        self.image.fill((0, 0, 0))
 
         self.mirror = mirror
 
         self.rect = self.image.get_rect()
         self.rect.x = int(50)
         self.rect.y = int(50)
+
 
 class ground_hitboxes(pygame.sprite.Sprite):
     def __init__(self, game, width, height, x, y, color):
@@ -900,11 +939,12 @@ class ground_hitboxes(pygame.sprite.Sprite):
 
         self.image = pygame.Surface((width, height))
         self.image.set_alpha(0)
-        #self.image.fill(color)
+        # self.image.fill(color)
 
         self.rect = self.image.get_rect()
         self.rect.x = int(self.x)
         self.rect.y = int(self.y)
+
 
 class extras_skins(pygame.sprite.Sprite):
     def __init__(self, game, follow, stat):
@@ -913,7 +953,8 @@ class extras_skins(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, self.groups)
 
         self.folder = Directory + "/Games/Teacher Brawl - the game/Game images/extra"
-        self.image = pygame.image.load(os.path.join(self.folder, "ns.png")).convert_alpha()
+        self.image = pygame.image.load(os.path.join(
+            self.folder, "ns.png")).convert_alpha()
         self.rect = self.image.get_rect()
         self.img = "ns.png"
 
@@ -927,6 +968,7 @@ class extras_skins(pygame.sprite.Sprite):
             if self.follow.controlled.boolians[self.stat]:
                 self.img = "s.png"
 
+
 class embers(pygame.sprite.Sprite):
     def __init__(self, game, ):
         self.game = game
@@ -935,13 +977,13 @@ class embers(pygame.sprite.Sprite):
 
         x = random.randrange(4, 8)
         self.image = pygame.Surface((x, x))
-        self.image.fill((212, random.randrange(50, 149),83))
+        self.image.fill((212, random.randrange(50, 149), 83))
         self.rect = self.image.get_rect()
         self.count = 0
 
     def update(self):
         if self.count == 0:
-            self.rect.x = random.randrange(screen_width , screen_width * 3)
+            self.rect.x = random.randrange(screen_width, screen_width * 3)
             self.rect.y = random.randrange(50, screen_height + 100)
             self.image.set_alpha(random.randrange(155, 255))
             self.count += 1
@@ -959,33 +1001,40 @@ class embers(pygame.sprite.Sprite):
             if self.rect.x < 0:
                 self.count = 0
 
+
 class background(pygame.sprite.Sprite):
     def __init__(self, game, image, y_change):
         self.game = game
         self.groups = game.backgrounds,
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.img = image
-        self.image = pygame.image.load(os.path.join(Directory + "/Game images/background", image)).convert_alpha()
+        self.image = pygame.image.load(os.path.join(
+            Directory + "/Game images/background", image)).convert_alpha()
         self.rect = self.image.get_rect()
 
-        self.image = pygame.transform.scale(self.image, (round(self.rect.width * 9), round(self.rect.height * 9)))
+        self.image = pygame.transform.scale(
+            self.image, (round(self.rect.width * 9), round(self.rect.height * 9)))
 
         self.rect = self.image.get_rect()
         self.change_y = y_change
 
     def update(self):
         if A.start_screen:
-            self.image = pygame.transform.scale(self.image, (screen_width, screen_height))
+            self.image = pygame.transform.scale(
+                self.image, (screen_width, screen_height))
             self.rect.x = 0
             self.rect.y = 0
         else:
-            self.image = pygame.image.load(os.path.join(Directory + "/Game images/background", self.img)).convert_alpha()
+            self.image = pygame.image.load(os.path.join(
+                Directory + "/Game images/background", self.img)).convert_alpha()
             self.rect = self.image.get_rect()
-            self.image = pygame.transform.scale(self.image, (round(self.rect.width * 9), round(self.rect.height * 9)))
+            self.image = pygame.transform.scale(
+                self.image, (round(self.rect.width * 9), round(self.rect.height * 9)))
             self.rect = self.image.get_rect()
 
             self.rect.x = -250
             self.rect.bottom = self.change_y
+
 
 class tiles(pygame.sprite.Sprite):
     def __init__(self, game, folder, image, select, chosen, x, y, move, name, y_change, icon, win):
@@ -993,9 +1042,12 @@ class tiles(pygame.sprite.Sprite):
         self.groups = game.tiles
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.image = pygame.image.load(os.path.join(folder, image)).convert_alpha()
+        print(image, folder)
+        self.image = pygame.image.load(
+            os.path.join(folder, image)).convert_alpha()
         self.rect = self.image.get_rect()
-        self.image = pygame.transform.scale(self.image, (self.rect.width * 10, self.rect.height * 10))
+        self.image = pygame.transform.scale(
+            self.image, (self.rect.width * 10, self.rect.height * 10))
 
         self.rect = self.image.get_rect()
 
@@ -1050,9 +1102,11 @@ class tiles(pygame.sprite.Sprite):
             self.select_region_x = 20
 
     def update_image(self):
-        self.image = pygame.image.load(os.path.join(self.folder, self.img)).convert_alpha()
+        self.image = pygame.image.load(os.path.join(
+            self.folder, self.img)).convert_alpha()
         self.rect = self.image.get_rect()
-        self.image = pygame.transform.scale(self.image, (self.rect.width * 10, self.rect.height * 10))
+        self.image = pygame.transform.scale(
+            self.image, (self.rect.width * 10, self.rect.height * 10))
         self.rect = self.image.get_rect()
 
         self.rect.x = self.x
@@ -1077,8 +1131,10 @@ class tiles(pygame.sprite.Sprite):
                 A.map_screen = False
                 for i in A.tiles:
                     A.tiles.remove(i)
-                A.MRAT = tiles(A, Directory + "/Game images/tiles", "MRA.png", "MRAS.png", "MRAC.png", 10, 10, 380, 0, 0, "MRAI.png", "MRAW.png")
-                A.MRSST = tiles(A, Directory + "/Game images/tiles", "MRSS.png", "MRSSS.png", "MRSSC.png", 400, 10, 380, 0, 0, "MRSSI.png", "MRSSW.png")
+                A.MRAT = tiles(A, Directory + "/Game images/tiles", "MRA.png",
+                               "MRAS.png", "MRAC.png", 10, 10, 380, 0, 0, "MRAI.png", "MRAW.png")
+                A.MRSST = tiles(A, Directory + "/Game images/tiles", "MRSS.png",
+                                "MRSSS.png", "MRSSC.png", 400, 10, 380, 0, 0, "MRSSI.png", "MRSSW.png")
                 A.name = self.name
                 A.y_change = self.y_change
 
@@ -1099,7 +1155,8 @@ class tiles(pygame.sprite.Sprite):
             if self.selected and self.button.count(0) == 1:
                 self.img = self.chosen
                 if not A.player_1_selected:
-                    A.I1 = icons(A, Directory + "/Game images/tiles", self.icon, 10, 10)
+                    A.I1 = icons(A, Directory +
+                                 "/Game images/tiles", self.icon, 10, 10)
                     A.player_1_selected = True
                     self.choose = True
                     A.L1 = numbers(A, A.HB1, 120, 10, self.win)
@@ -1114,18 +1171,17 @@ class tiles(pygame.sprite.Sprite):
                     A.player_2_selected = -100
 
             if A.player_2_selected == -100 and self.button.count(0) == 0:
-                A.I2 = icons(A, Directory + "/Game images/tiles", self.icon, screen_width - 110, 10)
+                A.I2 = icons(A, Directory + "/Game images/tiles",
+                             self.icon, screen_width - 110, 10)
                 A.player_2_selected = True
-                A.L2 = numbers(A, A.HB2, round(screen_width - 120 - 11 * (100 / 13)), 10, self.win)
+                A.L2 = numbers(A, A.HB2, round(
+                    screen_width - 120 - 11 * (100 / 13)), 10, self.win)
                 if self == A.MRAT:
                     A.MRAB = skin_base(A, A.HB2, 0)
                     A.MRA = Mr_A(A, A.MRAB)
                 if self == A.MRSST:
                     A.MRSSB = skin_base(A, A.HB2, 0)
                     A.MRSS = Mrs_S(A, A.MRSSB)
-
-
-
 
     def update(self):
         self.get_buttons()
@@ -1138,25 +1194,30 @@ class tiles(pygame.sprite.Sprite):
         else:
             self.check_select()
 
+
 class icons(pygame.sprite.Sprite):
     def __init__(self, game, folder, image, x, y):
         self.groups = game.sprite_embers
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.image = pygame.image.load(os.path.join(folder, image)).convert_alpha()
+        self.image = pygame.image.load(
+            os.path.join(folder, image)).convert_alpha()
         self.image = pygame.transform.scale(self.image, (100, 100))
         self.rect = self.image.get_rect()
 
         self.rect.x = x
         self.rect.y = y
 
+
 class numbers(pygame.sprite.Sprite):
     def __init__(self, game, target, x, y, win):
         self.groups = game.sprite_embers
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.image = pygame.image.load(os.path.join(Directory + "/Game images/numbers", "3.png")).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (round(11 * (100 / 13)), 100))
+        self.image = pygame.image.load(os.path.join(
+            Directory + "/Game images/numbers", "3.png")).convert_alpha()
+        self.image = pygame.transform.scale(
+            self.image, (round(11 * (100 / 13)), 100))
         self.rect = self.image.get_rect()
 
         self.x = x
@@ -1174,8 +1235,10 @@ class numbers(pygame.sprite.Sprite):
         self.move_ = False
 
     def update_image(self):
-        self.image = pygame.image.load(os.path.join(Directory + "/Game images/numbers", self.img)).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (round(11 * (100 / 13)), 100))
+        self.image = pygame.image.load(os.path.join(
+            Directory + "/Game images/numbers", self.img)).convert_alpha()
+        self.image = pygame.transform.scale(
+            self.image, (round(11 * (100 / 13)), 100))
         self.rect = self.image.get_rect()
 
     def move(self):
@@ -1189,8 +1252,9 @@ class numbers(pygame.sprite.Sprite):
         for i in range(self.y, round(screen_height / 2), 6):
             self.change_y.append(i)
 
-        self.rect.x = self.change_x[round(self.count * ((self.x - screen_width / 2) / (abs(self.x - screen_width / 2))))]
-        self.rect.y = self.change_y[ - self.count]
+        self.rect.x = self.change_x[round(
+            self.count * ((self.x - screen_width / 2) / (abs(self.x - screen_width / 2))))]
+        self.rect.y = self.change_y[- self.count]
 
         if self.change_x[self.count] == self.change_x[-1]:
             self.move_ = False
@@ -1212,15 +1276,18 @@ class numbers(pygame.sprite.Sprite):
                 A.end_game = True
                 self.target.life = 0
                 if self == A.L1:
-                    self.image = pygame.image.load(os.path.join(Directory + "/Game images/tiles", A.L2.win)).convert_alpha()
+                    self.image = pygame.image.load(os.path.join(
+                        Directory + "/Game images/tiles", A.L2.win)).convert_alpha()
                 else:
-                    self.image = pygame.image.load(os.path.join(Directory + "/Game images/tiles", A.L1.win)).convert_alpha()
+                    self.image = pygame.image.load(os.path.join(
+                        Directory + "/Game images/tiles", A.L1.win)).convert_alpha()
 
                 self.rect = self.image.get_rect()
-                self.image = pygame.transform.scale(self.image, (self.rect.width * 15, self.rect.height * 15))
+                self.image = pygame.transform.scale(
+                    self.image, (self.rect.width * 15, self.rect.height * 15))
                 self.rect = self.image.get_rect()
 
-                self.rect.x = round(screen_width / 2- self.rect.width / 2)
+                self.rect.x = round(screen_width / 2 - self.rect.width / 2)
                 self.rect.y = round(screen_height / 2 - 100)
 
             else:
@@ -1228,12 +1295,13 @@ class numbers(pygame.sprite.Sprite):
                 self.update_image()
                 self.move()
 
+
 class letters(pygame.sprite.Sprite):
     def __init__(self, game, color, target, ID, msg):
         self.groups = game.letters, game.sprite_embers
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.image = pygame.Surface((20,20))
+        self.image = pygame.Surface((20, 20))
         self.rect = self.image.get_rect()
         self.change = [0]
         self.count = -600
@@ -1247,7 +1315,8 @@ class letters(pygame.sprite.Sprite):
 
     def update(self):
         self.group_list = []
-        self.font = pygame.font.Font(Directory + "/Fonts/PixelEmulator-xq08.ttf", round(15 * A.C.total_scale))
+        self.font = pygame.font.Font(
+            Directory + "/Fonts/PixelEmulator-xq08.ttf", round(15 * A.C.total_scale))
         self.image = self.font.render(self.msg, False, self.color,).convert()
         self.rect = self.image.get_rect()
 
@@ -1267,23 +1336,27 @@ class letters(pygame.sprite.Sprite):
             A.sprite_embers.remove(self)
             A.letters.remove(self)
         if self.count > 0:
-            self.image.set_alpha(self.change[ - self.count])
+            self.image.set_alpha(self.change[- self.count])
 
-        self.rect.x = round(self.target.rect.x + A.C.camera.x - self.rect.width)
-        self.rect.y = round(self.target.rect.y + A.C.camera.y + (12 * A.C.total_scale   * self.group_list.index(self)))
+        self.rect.x = round(self.target.rect.x +
+                            A.C.camera.x - self.rect.width)
+        self.rect.y = round(self.target.rect.y + A.C.camera.y +
+                            (12 * A.C.total_scale * self.group_list.index(self)))
+
 
 class particles(pygame.sprite.Sprite):
-    def __init__(self, game, location, speed, slope, image, fade, rot = False):
+    def __init__(self, game, location, speed, slope, image, fade, rot=False):
         self.groups = game.sprite_embers, game.particles
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        self.image = pygame.image.load(os.path.join(Directory + "/Game images/extra", "DA.png")).convert_alpha()
+        self.image = pygame.image.load(os.path.join(
+            Directory + "/Game images/extra", "DA.png")).convert_alpha()
 
         self.rect = self.image.get_rect()
         self.location = location
 
-        self.x =  random.randrange(0, self.location.rect.width)
-        self.y =   random.randrange(0, 50)
+        self.x = random.randrange(0, self.location.rect.width)
+        self.y = random.randrange(0, 50)
 
         self.slope = random.randrange(-slope, slope)
         self.speed = random.randrange(-speed, speed)
@@ -1301,16 +1374,20 @@ class particles(pygame.sprite.Sprite):
 
     def update(self):
         self.count2 += 1
-        self.image = pygame.image.load(os.path.join(Directory + "/Game images/extra", self.img)).convert_alpha()
+        self.image = pygame.image.load(os.path.join(
+            Directory + "/Game images/extra", self.img)).convert_alpha()
         self.rect = self.image.get_rect()
-        self.image = pygame.transform.scale(self.image, (round(self.rect.width * A.C.total_scale * 1.4), round(self.rect.height* A.C.total_scale * 1.4)))
+        self.image = pygame.transform.scale(self.image, (round(
+            self.rect.width * A.C.total_scale * 1.4), round(self.rect.height * A.C.total_scale * 1.4)))
         self.rect = self.image.get_rect()
 
         if self.rot:
             self.image = pygame.transform.rotate(self.image, 50)
 
-        self.rect.x = self.location.rect.x + A.C.camera.x + self.x + (self.count2 * self.speed)
-        self.rect.y =self.location.rect.y + A.C.camera.y +  self.y + (self.slope * self.count2)
+        self.rect.x = self.location.rect.x + A.C.camera.x + \
+            self.x + (self.count2 * self.speed)
+        self.rect.y = self.location.rect.y + A.C.camera.y + \
+            self.y + (self.slope * self.count2)
 
         if self.count > 250:
             self.count -= 1
@@ -1350,12 +1427,15 @@ class sys():
 
         self.C = Camera(self)
 
-        self.G = ground_hitboxes(self, screen_width * 2, 500, -120, 800, (0,0,0))
-        self.G2 = ground_hitboxes(self, 200, 10, 1350, 300, (0, 0 ,0))
-        self.G3 = ground_hitboxes(self, 100, 10, 1300, 550, (0, 0 ,0))
+        self.G = ground_hitboxes(
+            self, screen_width * 2, 500, -120, 800, (0, 0, 0))
+        self.G2 = ground_hitboxes(self, 200, 10, 1350, 300, (0, 0, 0))
+        self.G3 = ground_hitboxes(self, 100, 10, 1300, 550, (0, 0, 0))
 
-        self.HB1 = hit_box1(self, 400, 660, MrA_stats[2], MrA_stats[3], MrA_stats[4], MrA_stats[5], MrA_stats[6], 90, 0)
-        self.HB2 = hit_box1(self, 1500, 660, MrsS_stats[2], MrsS_stats[3], MrsS_stats[4], MrsS_stats[5], MrsS_stats[6], -90, 1)
+        self.HB1 = hit_box1(
+            self, 400, 660, MrA_stats[2], MrA_stats[3], MrA_stats[4], MrA_stats[5], MrA_stats[6], 90, 0)
+        self.HB2 = hit_box1(
+            self, 1500, 660, MrsS_stats[2], MrsS_stats[3], MrsS_stats[4], MrsS_stats[5], MrsS_stats[6], -90, 1)
         self.A1 = arm(self, self.HB1)
         self.A2 = arm(self, self.HB2)
 
@@ -1375,10 +1455,14 @@ class sys():
         #self.map_screen = False
         #self.start_screen = False
 
-        self.AUD = tiles(self, Directory + "/Game images/background", "aud_win.png", "aud_win2.png", "aud_win2.png", 10, 5, 310, "aud1.png", 1100, 0, 0)
-        self.SOC = tiles(self, Directory + "/Game images/background", "soc_win.png", "soc_win2.png", "soc_win2.png", 320, 5, 310, "soc1.png", 1000, 0, 0)
-        self.SOC = tiles(self, Directory + "/Game images/background", "cor_win.png", "cor_win2.png", "cor_win2.png", 640, 5, 310, "cor1.png", 950, 0, 0)
-        self.SOC = tiles(self, Directory + "/Game images/background", "fron_win.png", "fron_win2.png", "fron_win2.png", 950, 5, 310, "fron1.png", 1000, 0, 0)
+        self.AUD = tiles(self, Directory + "/Game images/background", "aud_win.png",
+                         "aud_win2.png", "aud_win2.png", 10, 5, 310, "aud1.png", 1100, 0, 0)
+        self.SOC = tiles(self, Directory + "/Game images/background", "soc_win.png",
+                         "soc_win2.png", "soc_win2.png", 320, 5, 310, "soc1.png", 1000, 0, 0)
+        self.SOC = tiles(self, Directory + "/Game images/background", "cor_win.png",
+                         "cor_win2.png", "cor_win2.png", 640, 5, 310, "cor1.png", 950, 0, 0)
+        self.SOC = tiles(self, Directory + "/Game images/background", "fron_win.png",
+                         "fron_win2.png", "fron_win2.png", 950, 5, 310, "fron1.png", 1000, 0, 0)
 
         for i in range(500):
             self.i = embers(self)
@@ -1386,22 +1470,30 @@ class sys():
         self.x += 1
 
     def draw_stamina_bars(self, target):
-        center = (min(0, (- target.rect.width) * target.controlled.dir_his[-1] / 90 ))
-        start_x = round(target.rect.x + abs((target.center * 3 * A.C.total_scale) + center) - ((80 * A.C.total_scale) / 2) + A.C.camera.x)
+        center = (min(0, (- target.rect.width) *
+                  target.controlled.dir_his[-1] / 90))
+        start_x = round(target.rect.x + abs((target.center * 3 * A.C.total_scale) +
+                        center) - ((80 * A.C.total_scale) / 2) + A.C.camera.x)
 
-        pygame.draw.rect(screen, (197, 218, 250), ((start_x, round(target.rect.y - (25 * A.C.total_scale) + A.C.y)), (round(80 * A.C.total_scale), round(14 * A.C.total_scale))))
-        pygame.draw.rect(screen, (79, 182, 255), ((start_x, round(target.rect.y - (25 * A.C.total_scale) + A.C.y)), ((round((80 * A.C.total_scale) * max(0, (target.controlled.stats[1] / target.stamina)))), round(14 * A.C.total_scale))))
-        pygame.draw.rect(screen, (0, 0, 0), ((start_x, round(target.rect.y - (25 * A.C.total_scale) + A.C.y)), (round(80 * A.C.total_scale), round(14 * A.C.total_scale))), round(3 * A.C.total_scale))
+        pygame.draw.rect(screen, (197, 218, 250), ((start_x, round(
+            target.rect.y - (25 * A.C.total_scale) + A.C.y)), (round(80 * A.C.total_scale), round(14 * A.C.total_scale))))
+        pygame.draw.rect(screen, (79, 182, 255), ((start_x, round(target.rect.y - (25 * A.C.total_scale) + A.C.y)), ((
+            round((80 * A.C.total_scale) * max(0, (target.controlled.stats[1] / target.stamina)))), round(14 * A.C.total_scale))))
+        pygame.draw.rect(screen, (0, 0, 0), ((start_x, round(target.rect.y - (25 * A.C.total_scale) + A.C.y)),
+                         (round(80 * A.C.total_scale), round(14 * A.C.total_scale))), round(3 * A.C.total_scale))
 
     def draw_health_bars(self, target, screen_div, total, start_x):
         pygame.draw.rect(screen, (197, 218, 250), ((start_x, 12), (490, 35)),)
-        pygame.draw.rect(screen, (244, 66, 66), ((start_x, 12), ((round(490 * (target.mirror.stats[0] / target.mirror.player.health)), 35))))
-        pygame.draw.rect(screen, (0, 0, 0), ((start_x, 12 ), (490, 35)), 5)
+        pygame.draw.rect(screen, (244, 66, 66), ((start_x, 12), ((
+            round(490 * (target.mirror.stats[0] / target.mirror.player.health)), 35))))
+        pygame.draw.rect(screen, (0, 0, 0), ((start_x, 12), (490, 35)), 5)
 
     def update_shield(self, target):
-        self.ESA.image = pygame.image.load(os.path.join(self.ESA.folder, self.ESA.img)).convert_alpha()
+        self.ESA.image = pygame.image.load(os.path.join(
+            self.ESA.folder, self.ESA.img)).convert_alpha()
         self.ESA.rect = self.ESA.image.get_rect()
-        self.ESA.image = pygame.transform.scale(self.ESA.image, (round((self.ESA.rect.width * 2) * self.C.total_scale ), round((self.ESA.rect.height * 2) * self.C.total_scale)))
+        self.ESA.image = pygame.transform.scale(self.ESA.image, (round(
+            (self.ESA.rect.width * 2) * self.C.total_scale), round((self.ESA.rect.height * 2) * self.C.total_scale)))
         self.ESA.rect = self.ESA.image.get_rect()
         self.ESA.rect.x = target.rect.x
         self.ESA.rect.y = target.rect.y
@@ -1419,7 +1511,7 @@ class sys():
         self.draw_health_bars(A.P, 1, 2, round(130 + 11 * (100 / 13)))
         self.draw_stamina_bars(A.MRSS)
         self.draw_health_bars(A.P2, 2, 2, 735)
-        #self.update_shield(A.MRA)
+        # self.update_shield(A.MRA)
 
     def update(self):
         if not self.map_screen:
@@ -1443,6 +1535,7 @@ class sys():
                 self.start_screen = False
 
         clock.tick(60)
+
 
 A = sys()
 
